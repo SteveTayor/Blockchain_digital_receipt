@@ -3,10 +3,12 @@ import 'package:web3dart/web3dart.dart';
 import 'dart:typed_data';
 
 class BlockchainService {
-  // Replace with your Infura or other Ethereum node URL
-  final String rpcUrl = "https://goerli.infura.io/v3/YOUR_INFURA_PROJECT_ID";
+  // Alchemy Sepolia Network URL
+  final String rpcUrl =
+      "https://eth-sepolia.g.alchemy.com/v2/47_HeGgiNZbZAWCLBs3uN-uyncSsyjGt";
+
   // Replace with a valid private key for testing
-  final String privateKey = "YOUR_PRIVATE_KEY";
+  final String privateKey = "";
 
   late Web3Client _client;
   late EthPrivateKey _credentials;
@@ -20,20 +22,41 @@ class BlockchainService {
 
   /// Logs receipt data on-chain (for demonstration, sending a zero-value tx).
   Future<String> logReceiptOnBlockchain(String data) async {
-    final transaction = Transaction(
-      from: _ownAddress,
-      to: _ownAddress,
-      value: EtherAmount.zero(),
-      data: _encodeData(data),
-    );
-    // chainId for Goerli is 5; adjust if using another testnet
-    final txHash =
-        await _client.sendTransaction(_credentials, transaction, chainId: 5);
-    return txHash;
+    try {
+      final transaction = Transaction(
+        from: _ownAddress,
+        to: _ownAddress,
+        value: EtherAmount.zero(),
+        data: _encodeData(data),
+      );
+      // Sepolia Chain ID is 11155111
+      final txHash = await _client.sendTransaction(
+        _credentials,
+        transaction,
+        chainId: 11155111,
+      );
+      print("Transaction Hash: $txHash");
+      return txHash;
+    } catch (e) {
+      print("Error sending transaction: $e");
+      return "Error: $e";
+    }
   }
 
   /// Encodes the receipt data as bytes.
   Uint8List _encodeData(String data) {
     return Uint8List.fromList(data.codeUnits);
+  }
+
+  /// Get latest block number
+  Future<int> getLatestBlockNumber() async {
+    try {
+      final latestBlock = await _client.getBlockNumber();
+      print("Latest Block Number: $latestBlock");
+      return latestBlock;
+    } catch (e) {
+      print("Error getting latest block: $e");
+      return -1;
+    }
   }
 }
