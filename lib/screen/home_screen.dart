@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../models/receipt.dart';
-import '../repositories/receipt_repository.dart';
+import '../repository/receipt_repository.dart';
 import 'add_receipt_screen.dart';
 import 'receipt_details_screen.dart';
 
