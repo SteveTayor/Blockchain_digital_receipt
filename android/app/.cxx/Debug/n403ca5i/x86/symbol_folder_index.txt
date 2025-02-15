@@ -1,0 +1,1 @@
+/home/stephen/development/repo/Blockchain_digital_receipt/build/app/intermediates/cxx/Debug/n403ca5i/obj/x86
