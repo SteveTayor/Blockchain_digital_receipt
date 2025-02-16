@@ -142,14 +142,16 @@ class _ReceiptDetailsScreenState extends State<ReceiptDetailsScreen> {
             Card(
               color: Colors.white,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 child: Column(
                   spacing: 16,
                   children: [
                     const Text(
                       "Blockchain Verification",
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                     ),
                     Text(
                       "Transaction Hash",
@@ -173,48 +175,55 @@ class _ReceiptDetailsScreenState extends State<ReceiptDetailsScreen> {
             // const SizedBox(height: 16),
 
             // Items
-            const Text(
-              "Items",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-            ),
-            const SizedBox(height: 8),
-            Column(
-              children: receipt.items
-                  .map((item) => Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(item.name),
-                            Text("\$${item.price.toStringAsFixed(2)}"),
-                          ],
-                        ),
-                      ))
-                  .toList(),
-            ),
-            const SizedBox(height: 16),
-
-            // Notes
-            if (receipt.notes.isNotEmpty) ...[
-              const Text(
-                "Notes",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            Card(
+              
+              child: Column(
+                spacing: 10,
+                children: [
+                  const Text(
+                    "Items",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                  Column(
+                    children: receipt.items
+                        .map((item) => Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 4.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(item.name),
+                                  Text("\$${item.price.toStringAsFixed(2)}"),
+                                ],
+                              ),
+                            ))
+                        .toList(),
+                  ),
+                              // Notes
+              if (receipt.notes.isNotEmpty) ...[
+                const Text(
+                  "Notes",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+                const SizedBox(height: 8),
+                Text(receipt.notes),
+                const SizedBox(height: 16),
+              ],
+              
+              // Image
+              if (receipt.imageFile != null) ...[
+                const Text(
+                  "Receipt Image",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+                const SizedBox(height: 8),
+                Image.file(receipt.imageFile!),
+                const SizedBox(height: 16),
+              ],
+              
+              
+                ],
               ),
-              const SizedBox(height: 8),
-              Text(receipt.notes),
-              const SizedBox(height: 16),
-            ],
-
-            // Image
-            if (receipt.imageFile != null) ...[
-              const Text(
-                "Receipt Image",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              ),
-              const SizedBox(height: 8),
-              Image.file(receipt.imageFile!),
-              const SizedBox(height: 16),
-            ],
+            ),
 
             // Share / Additional actions
             SizedBox(
