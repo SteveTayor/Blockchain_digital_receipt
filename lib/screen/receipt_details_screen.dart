@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+// import 'package:flutter_share_me/flutter_share_me.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as p;
-import 'package:share_plus/share_plus.dart';
 import '../models/receipt.dart';
 import '../repository/receipt_repository.dart';
 
@@ -32,12 +32,20 @@ class _ReceiptDetailsScreenState extends State<ReceiptDetailsScreen> {
       _isLoading = false;
     });
   }
-  void shareTransactionDetails(String txHash) {
-  final shareText = 'Check out this blockchain transaction: $txHash\n'
-      'You can verify it on the Ethereum Sepolia testnet explorer.';
-  Share.share(shareText, subject: 'Blockchain Receipt');
-}
+//   void shareTransactionDetails(String txHash) {
+//   final shareText = 'Check out this blockchain transaction: $txHash\n'
+//       'You can verify it on the Ethereum Sepolia testnet explorer.';
+//   Share.share(shareText, subject: 'Blockchain Receipt');
+// }
+// Future<void> shareTransactionDetails(String txHash) async {
+//   String shareText = 'Check out this blockchain transaction: $txHash\n'
+//       'You can verify it on the Ethereum Sepolia testnet explorer.';
 
+//   FlutterShareMe flutterShareMe = FlutterShareMe();
+
+  // Share to system's native share dialog
+  // await flutterShareMe.shareToSystem(msg: shareText);
+// }
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
@@ -168,7 +176,7 @@ class _ReceiptDetailsScreenState extends State<ReceiptDetailsScreen> {
               child: ElevatedButton(
                 onPressed: () {
                   // TODO: Implement share functionality 
-                  shareTransactionDetails(transactionHash);
+                  // shareTransactionDetails(transactionHash);
                 },
                 child: const Text("Share Receipt"),
               ),
