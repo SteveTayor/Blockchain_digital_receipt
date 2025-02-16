@@ -32,6 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text('BlockReceipt'),
         centerTitle: true,
+        backgroundColor: Colors.deepOrange.shade600,
       ),
       body: FutureBuilder<List<Receipt>>(
         future: _futureReceipts,
@@ -53,51 +54,64 @@ class _HomeScreenState extends State<HomeScreen> {
                   // Welcome text
                   const Text(
                     "Welcome back, Alex",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 4),
                   const Text(
                     "Manage your secure digital receipts",
+                    textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 16, color: Colors.grey),
                   ),
                   const SizedBox(height: 24),
 
                   // Recent Receipts Section
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        "Recent Receipts",
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          // Could show all receipts on a new screen, or do nothing
-                        },
-                        child: const Text(
-                          "See All",
-                          style: TextStyle(color: Colors.blue),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
+                  Card(
+                    color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                "Recent Receipts",
+                                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  // Could show all receipts on a new screen, or do nothing
+                                },
+                                child: const Text(
+                                  "See All",
+                                  style: TextStyle(fontSize: 16, color: Colors.teal),
+                                ),
+                              ),
+                            ],
+                          ),
+                  const SizedBox(height: 15),
                   if (receipts.isEmpty)
-                    const Text("No recent receipts.")
+                    const Text("No recent receipts.", textAlign: TextAlign.center,)
                   else
                     Column(
                       children: receipts
                           .reversed // show newest first
-                          .take(3)
+                          .take(4)
                           .map((r) => _buildReceiptTile(context, r))
                           .toList(),
                     ),
                   const SizedBox(height: 24),
+                        ],
+                      ),
+                    ),
+                  ),
 
                   // Receipt Statistics
                   const Text(
                     "Receipt Statistics",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 12),
                   _buildStatsCard(receipts),
@@ -146,9 +160,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildReceiptTile(BuildContext context, Receipt r) {
     final formattedDate = DateFormat.yMMMd().format(r.date);
     return Card(
+      color: Colors.orange.shade500,
       child: ListTile(
-        title: Text(r.vendorName),
-        subtitle: Text("$formattedDate • \$${r.amount.toStringAsFixed(2)}"),
+        title: Text(r.vendorName, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600,), ),
+        subtitle: Text("$formattedDate "),
+        trailing: Text("\$${r.amount.toStringAsFixed(3)}", style: const TextStyle(color:Colors.deepOrange ,fontSize: 14, fontWeight: FontWeight.w400),),
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(
@@ -174,17 +190,24 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Column(
-            children: [
-              Text(
-                receipts.length.toString(),
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.orange.shade500,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Column(
+              children: [
+                Text(
+                  receipts.length.toString(),
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    
+                  ),
                 ),
-              ),
-              const Text("Total Receipts"),
-            ],
+                const Text("Total Receipts"),
+              ],
+            ),
           ),
           Column(
             children: [

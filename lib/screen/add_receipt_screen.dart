@@ -138,6 +138,7 @@ class _AddReceiptScreenState extends State<AddReceiptScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Add New Receipt"),
+                backgroundColor: Colors.deepOrange.shade600,
       ),
       body: SafeArea(
         child: SingleChildScrollView(

@@ -51,6 +51,7 @@ class _ReceiptDetailsScreenState extends State<ReceiptDetailsScreen> {
     if (_isLoading) {
       return const Scaffold(
         body: Center(child: CircularProgressIndicator()),
+        
       );
     }
     if (_receipt == null) {
@@ -69,6 +70,7 @@ class _ReceiptDetailsScreenState extends State<ReceiptDetailsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Receipt Details"),
+                backgroundColor: Colors.deepOrange.shade600,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
