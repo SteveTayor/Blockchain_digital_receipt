@@ -294,7 +294,10 @@ class _ReceiptDetailsScreenState extends State<ReceiptDetailsScreen> {
               Expanded(
                 child: Text(
                   value,
-                  textAlign: TextAlign.right,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: value.startsWith("0x")? Colors.green:Colors.white,
+                    fontWeight: FontWeight.bold,),
                 ),
               ),
             ],
