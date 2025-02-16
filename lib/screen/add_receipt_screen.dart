@@ -142,7 +142,7 @@ class _AddReceiptScreenState extends State<AddReceiptScreen> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 16),
           child: _isSubmitting
               ? const Center(child: CircularProgressIndicator())
               : Form(

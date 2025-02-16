@@ -51,7 +51,6 @@ class _ReceiptDetailsScreenState extends State<ReceiptDetailsScreen> {
     if (_isLoading) {
       return const Scaffold(
         body: Center(child: CircularProgressIndicator()),
-        
       );
     }
     if (_receipt == null) {
@@ -69,64 +68,109 @@ class _ReceiptDetailsScreenState extends State<ReceiptDetailsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Receipt Details"),
-                backgroundColor: Colors.deepOrange.shade600,
+        title: const Text("Receipt Details",
+            style: TextStyle(fontSize: 30, color: Colors.white)),
+        backgroundColor: Colors.deepOrange.shade600,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 16),
         child: Column(
+          spacing: 24,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Vendor and Amount
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  receipt.vendorName,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+            Card(
+              color: Colors.white,
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          receipt.vendorName,
+                          style: const TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          totalAmount,
+                          style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.orange,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Text(dateString,
+                        style: TextStyle(color: Colors.grey.shade600)),
+                  ],
                 ),
-                Text(
-                  totalAmount,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blueAccent,
-                  ),
-                ),
-              ],
+              ),
             ),
-            const SizedBox(height: 4),
-            Text(dateString, style: const TextStyle(color: Colors.grey)),
-            const SizedBox(height: 16),
 
             // Transaction Details
-            const Text(
-              "Transaction Details",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            Card(
+              color: Colors.white,
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                child: Column(
+                  spacing: 8,
+                  children: [
+                    const Text(
+                      "Transaction Details",
+                      textAlign: TextAlign.center,
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                    ),
+                    _buildDetailRow("Receipt ID", receipt.id),
+                    _buildDetailRow("Payment Method", receipt.paymentMethod),
+                    _buildDetailRow("Store Location", receipt.storeLocation),
+                    _buildDetailRow("Category", receipt.category),
+                  ],
+                ),
+              ),
             ),
-            const SizedBox(height: 8),
-            _buildDetailRow("Receipt ID", receipt.id),
-            _buildDetailRow("Payment Method", receipt.paymentMethod),
-            _buildDetailRow("Store Location", receipt.storeLocation),
-            _buildDetailRow("Category", receipt.category),
-            const SizedBox(height: 16),
 
             // Blockchain Verification
-            const Text(
-              "Blockchain Verification",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-            ),
-            const SizedBox(height: 8),
-            _buildDetailRow("Transaction Hash", transactionHash),
-            if (transactionHash.startsWith("0x"))
-              const Text(
-                "Verified on Ethereum",
-                style: TextStyle(color: Colors.green),
+            Card(
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                child: Column(
+                  spacing: 16,
+                  children: [
+                    const Text(
+                      "Blockchain Verification",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                    ),
+                    Text(
+                      "Transaction Hash",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.grey.shade600,
+                          letterSpacing: 0.5,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18),
+                    ),
+                    _buildDetailRow("", transactionHash),
+                    if (transactionHash.startsWith("0x"))
+                      const Text(
+                        "Verified on Ethereum",
+                        style: TextStyle(color: Colors.green),
+                      ),
+                  ],
+                ),
               ),
-            const SizedBox(height: 16),
+            ),
+            // const SizedBox(height: 16),
 
             // Items
             const Text(
@@ -177,7 +221,7 @@ class _ReceiptDetailsScreenState extends State<ReceiptDetailsScreen> {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  // TODO: Implement share functionality 
+                  // TODO: Implement share functionality
                   // shareTransactionDetails(transactionHash);
                 },
                 child: const Text("Share Receipt"),
@@ -189,20 +233,29 @@ class _ReceiptDetailsScreenState extends State<ReceiptDetailsScreen> {
     );
   }
 
-  Widget _buildDetailRow(String label, String value) {
+  Widget _buildDetailRow(String? label, String value) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 4.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(label),
-          Expanded(
-            child: Text(
-              value,
-              textAlign: TextAlign.right,
-            ),
+      child: Card(
+        color: Colors.orange.shade50,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(label!,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  )),
+              Expanded(
+                child: Text(
+                  value,
+                  textAlign: TextAlign.right,
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
