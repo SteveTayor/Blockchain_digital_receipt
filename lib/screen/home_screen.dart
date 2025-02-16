@@ -26,11 +26,10 @@ class _HomeScreenState extends State<HomeScreen> {
     _futureReceipts = ReceiptRepository.instance.getAllReceipts();
   }
 
-  @override
-  Widget build(BuildContext context) {
+  @override  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('BlockReceipt'),
+        title: const Text('BlockReceipt', style: TextStyle(fontSize: 35,color: Colors.white),),
         centerTitle: true,
         backgroundColor: Colors.deepOrange.shade600,
       ),
@@ -52,16 +51,23 @@ class _HomeScreenState extends State<HomeScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Welcome text
-                  const Text(
-                    "Welcome back, Alex",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 4),
-                  const Text(
-                    "Manage your secure digital receipts",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                  Center(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const Text(
+                          "Welcome back, Alex",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                        ),
+                    const SizedBox(height: 4),
+                    const Text(
+                      "Manage your secure digital receipts",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                    ),
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 24),
 
@@ -96,27 +102,39 @@ class _HomeScreenState extends State<HomeScreen> {
                     const Text("No recent receipts.", textAlign: TextAlign.center,)
                   else
                     Column(
+                      spacing: 20,
                       children: receipts
                           .reversed // show newest first
                           .take(4)
                           .map((r) => _buildReceiptTile(context, r))
                           .toList(),
                     ),
-                  const SizedBox(height: 24),
                         ],
                       ),
                     ),
                   ),
 
-                  // Receipt Statistics
-                  const Text(
-                    "Receipt Statistics",
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 12),
-                  _buildStatsCard(receipts),
                   const SizedBox(height: 24),
+                  // Receipt Statistics
+                  Card(
+                    color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "Receipt Statistics",
+                            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                          ),
+                  const SizedBox(height: 8),
+                  _buildStatsCard(receipts),
+                        ],
+                      ),
+                    ),
+                  ),
 
+                  const SizedBox(height: 24),
                   // Categories
                   const Text(
                     "Categories",
@@ -159,10 +177,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildReceiptTile(BuildContext context, Receipt r) {
     final formattedDate = DateFormat.yMMMd().format(r.date);
-    return Card(
-      color: Colors.orange.shade500,
+    return Container(
+      
+      decoration: BoxDecoration(
+       color: Colors.orange.shade50,
+        borderRadius: BorderRadius.circular(12),
+      ),
       child: ListTile(
-        title: Text(r.vendorName, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600,), ),
+        title: Text(r.vendorName, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600,), ),
         subtitle: Text("$formattedDate "),
         trailing: Text("\$${r.amount.toStringAsFixed(3)}", style: const TextStyle(color:Colors.deepOrange ,fontSize: 14, fontWeight: FontWeight.w400),),
         onTap: () {
@@ -192,34 +214,45 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           Container(
             decoration: BoxDecoration(
-              color: Colors.orange.shade500,
+              color: Colors.orange.shade50,
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Column(
-              children: [
-                Text(
-                  receipts.length.toString(),
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 34, vertical: 8),
+              child: Column(
+                children: [
+                  Text(
+                    receipts.length.toString(),
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+              
+                    ),
                   ),
-                ),
-                const Text("Total Receipts"),
-              ],
+                  const Text("Total Receipts"),
+                ],
+              ),
             ),
           ),
-          Column(
-            children: [
-              Text(
-                "\$${totalSpent.toStringAsFixed(2)}",
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
+          Container(decoration: BoxDecoration(
+              color: Colors.orange.shade50,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Padding(
+               padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 8),
+              child: Column(
+                children: [
+                  Text(
+                    "\$${totalSpent.toStringAsFixed(2)}",
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const Text("Total Spent"),
+                ],
               ),
-              const Text("Total Spent"),
-            ],
+            ),
           ),
         ],
       ),
@@ -234,8 +267,8 @@ class _CategoryChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Chip(
-      label: Text(label),
-      backgroundColor: Colors.white,
+      label: Text(label, style:  TextStyle(fontWeight: FontWeight.bold,color: label == "Groceries" ? Colors.deepOrange : label == "Entertainment" ? Colors.purple.shade500 : Colors.black,),),
+      backgroundColor: label == "Groceries" ? Colors.white : label == "Entertainment" ? Colors.purple.shade50 : Colors.orange.shade100,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
       ),
