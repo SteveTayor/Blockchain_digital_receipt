@@ -162,7 +162,7 @@ class _ReceiptDetailsScreenState extends State<ReceiptDetailsScreen> {
                           fontWeight: FontWeight.bold,
                           fontSize: 18),
                     ),
-                    _buildDetailRow("", transactionHash),
+                    _buildTransactionRow(transactionHash),
                     if (transactionHash.startsWith("0x"))
                       const Text(
                         "Verified on Ethereum",
@@ -176,66 +176,74 @@ class _ReceiptDetailsScreenState extends State<ReceiptDetailsScreen> {
 
             // Items
             Card(
-              
-              child: Column(
-                spacing: 10,
-                children: [
+              color:Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 10,
+                  children: [
+                    const Text(
+                      "Items",
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                    ),
+                    Column(
+                      children: receipt.items
+                          .map((item) => Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(item.name),
+                                    Text("\$${item.price.toStringAsFixed(2)}",
+                                        style:   TextStyle(
+                                          color: Colors.orange.shade600,
+                                          fontWeight: FontWeight.bold,
+                                        )),
+                                  ],
+                                ),
+                              ))
+                          .toList(),
+                    ),
+                                // Notes
+                if (receipt.notes.isNotEmpty) ...[
                   const Text(
-                    "Items",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    "Notes",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                   ),
-                  Column(
-                    children: receipt.items
-                        .map((item) => Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 4.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(item.name),
-                                  Text("\$${item.price.toStringAsFixed(2)}"),
-                                ],
-                              ),
-                            ))
-                        .toList(),
-                  ),
-                              // Notes
-              if (receipt.notes.isNotEmpty) ...[
-                const Text(
-                  "Notes",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                ),
-                const SizedBox(height: 8),
-                Text(receipt.notes),
-                const SizedBox(height: 16),
-              ],
-              
-              // Image
-              if (receipt.imageFile != null) ...[
-                const Text(
-                  "Receipt Image",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                ),
-                const SizedBox(height: 8),
-                Image.file(receipt.imageFile!),
-                const SizedBox(height: 16),
-              ],
-              
-              
+                  const SizedBox(height: 8),
+                  Text(receipt.notes),
+                  const SizedBox(height: 16),
                 ],
+                
+                // Image
+                if (receipt.imageFile != null) ...[
+                  const Text(
+                    "Receipt Image",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  ),
+                  const SizedBox(height: 8),
+                  Image.file(receipt.imageFile!),
+                  const SizedBox(height: 16),
+                ],
+                
+                
+                  ],
+                ),
               ),
             ),
-
+            SizedBox(height: 36),
             // Share / Additional actions
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  // TODO: Implement share functionality
-                  // shareTransactionDetails(transactionHash);
-                },
-                child: const Text("Share Receipt"),
-              ),
-            ),
+            // SizedBox(
+            //   width: double.infinity,
+            //   child: ElevatedButton(
+            //     onPressed: () {
+            //       // TODO: Implement share functionality
+            //       // shareTransactionDetails(transactionHash);
+            //     },
+            //     child: const Text("Share Receipt"),
+            //   ),
+            // ),
           ],
         ),
       ),
@@ -256,6 +264,33 @@ class _ReceiptDetailsScreenState extends State<ReceiptDetailsScreen> {
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                   )),
+              Expanded(
+                child: Text(
+                  value,
+                  textAlign: TextAlign.right,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+    Widget _buildTransactionRow(String value) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 4.0),
+      child: Card(
+        color: value.startsWith("0x")?  Colors.orange.shade50:Colors.red,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // Text(label!,
+              //     style: const TextStyle(
+              //       fontWeight: FontWeight.bold,
+              //     )),
               Expanded(
                 child: Text(
                   value,
