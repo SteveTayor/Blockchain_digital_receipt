@@ -1,0 +1,2 @@
+/home/stephen/development/repo/Blockchain_digital_receipt/android/app/.cxx/RelWithDebInfo/p2r1m3s5/armeabi-v7a/CMakeFiles/edit_cache.dir
+/home/stephen/development/repo/Blockchain_digital_receipt/android/app/.cxx/RelWithDebInfo/p2r1m3s5/armeabi-v7a/CMakeFiles/rebuild_cache.dir
