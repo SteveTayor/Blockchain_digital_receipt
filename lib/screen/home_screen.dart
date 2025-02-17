@@ -186,7 +186,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: ListTile(
         title: Text(r.vendorName, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600,), ),
         subtitle: Text("$formattedDate "),
-        trailing: Text("\$${r.amount.toStringAsFixed(3)}", style: const TextStyle(color:Colors.deepOrange ,fontSize: 14, fontWeight: FontWeight.w400),),
+        trailing: Text("\$${r.amountNaira.toStringAsFixed(3)}", style: const TextStyle(color:Colors.deepOrange ,fontSize: 14, fontWeight: FontWeight.w400),),
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(
@@ -201,7 +201,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildStatsCard(List<Receipt> receipts) {
     double totalSpent = 0;
     for (var r in receipts) {
-      totalSpent += r.amount;
+      totalSpent += r.amountNaira;
     }
     return Container(
       padding: const EdgeInsets.all(16),

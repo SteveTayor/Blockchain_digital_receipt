@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:path/path.dart' as p;
 import '../models/receipt.dart';
 import '../repository/receipt_repository.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class ReceiptDetailsScreen extends StatefulWidget {
   final String receiptId;
@@ -15,6 +16,7 @@ class ReceiptDetailsScreen extends StatefulWidget {
 }
 
 class _ReceiptDetailsScreenState extends State<ReceiptDetailsScreen> {
+  final double nairaToUsdRate = 1500.0; 
   Receipt? _receipt;
   bool _isLoading = true;
 
@@ -63,7 +65,8 @@ class _ReceiptDetailsScreenState extends State<ReceiptDetailsScreen> {
     final receipt = _receipt!;
     final dateString =
         "${DateFormat.yMMMMd().format(receipt.date)} • ${DateFormat('h:mm a').format(receipt.date)}";
-    final totalAmount = "\$${receipt.amount.toStringAsFixed(2)}";
+     double amountUsd = receipt.amountNaira / nairaToUsdRate;
+    final totalAmount = "\$${amountUsd.toStringAsFixed(2)}";
     final transactionHash = receipt.blockchainHash ?? "Pending or Error";
 
     return Scaffold(
@@ -97,6 +100,9 @@ class _ReceiptDetailsScreenState extends State<ReceiptDetailsScreen> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
+                        Text("Amount: ₦${receipt.amountNaira}", style: const TextStyle(fontSize: 18)),
+                    // Text("Equivalent in USD: \$${amountUsd.toStringAsFixed(2)}", style: TextStyle(fontSize: 14, color: Colors.grey)),
+         
                         Text(
                           totalAmount,
                           style: const TextStyle(
@@ -130,7 +136,7 @@ class _ReceiptDetailsScreenState extends State<ReceiptDetailsScreen> {
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                     ),
                     _buildDetailRow("Receipt ID", receipt.id),
-                    _buildDetailRow("Payment Method", receipt.paymentMethod),
+                    _buildDetailRow("Payment Method", receipt.encryptedPaymentMethod),
                     _buildDetailRow("Store Location", receipt.storeLocation),
                     _buildDetailRow("Category", receipt.category),
                   ],
@@ -168,6 +174,8 @@ class _ReceiptDetailsScreenState extends State<ReceiptDetailsScreen> {
                         "Verified on Ethereum",
                         style: TextStyle(color: Colors.green),
                       ),
+                    if (transactionHash.startsWith("0x"))
+                      QrImageView(data: transactionHash, size: 200),
                   ],
                 ),
               ),
@@ -176,27 +184,31 @@ class _ReceiptDetailsScreenState extends State<ReceiptDetailsScreen> {
 
             // Items
             Card(
-              color:Colors.white,
+              color: Colors.white,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   spacing: 10,
                   children: [
                     const Text(
                       "Items",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                     ),
                     Column(
                       children: receipt.items
                           .map((item) => Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 4.0),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(item.name),
                                     Text("\$${item.price.toStringAsFixed(2)}",
-                                        style:   TextStyle(
+                                        style: TextStyle(
                                           color: Colors.orange.shade600,
                                           fontWeight: FontWeight.bold,
                                         )),
@@ -205,29 +217,29 @@ class _ReceiptDetailsScreenState extends State<ReceiptDetailsScreen> {
                               ))
                           .toList(),
                     ),
-                                // Notes
-                if (receipt.notes.isNotEmpty) ...[
-                  const Text(
-                    "Notes",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(receipt.notes),
-                  const SizedBox(height: 16),
-                ],
-                
-                // Image
-                if (receipt.imageFile != null) ...[
-                  const Text(
-                    "Receipt Image",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                  ),
-                  const SizedBox(height: 8),
-                  Image.file(receipt.imageFile!),
-                  const SizedBox(height: 16),
-                ],
-                
-                
+                    // Notes
+                    if (receipt.notes.isNotEmpty) ...[
+                      const Text(
+                        "Notes",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(receipt.notes),
+                      const SizedBox(height: 16),
+                    ],
+
+                    // Image
+                    if (receipt.imageFile != null) ...[
+                      const Text(
+                        "Receipt Image",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20),
+                      ),
+                      const SizedBox(height: 8),
+                      Image.file(receipt.imageFile!),
+                      const SizedBox(height: 16),
+                    ],
                   ],
                 ),
               ),
@@ -277,33 +289,44 @@ class _ReceiptDetailsScreenState extends State<ReceiptDetailsScreen> {
     );
   }
 
-    Widget _buildTransactionRow(String value) {
+  Widget _buildTransactionRow(String value) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 4.0),
-      child: Card(
-        color: value.startsWith("0x")?  Colors.orange.shade50:Colors.red,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              // Text(label!,
-              //     style: const TextStyle(
-              //       fontWeight: FontWeight.bold,
-              //     )),
-              Expanded(
-                child: Text(
-                  value,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: value.startsWith("0x")? Colors.green:Colors.white,
-                    fontWeight: FontWeight.bold,),
+      child: value.contains("Insufficient funds ")
+          ? Card(
+              color: Colors.red,
+              child: Padding(
+                padding: EdgeInsets.all(8),
+                child: Text("Insufficient funds for transfer on your wallet",
+                    style: TextStyle(color: Colors.white)),
+              ),
+            )
+          : Card(
+              color: Colors.orange.shade50,
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // Text(label!,
+                    //     style: const TextStyle(
+                    //       fontWeight: FontWeight.bold,
+                    //     )),
+                    Expanded(
+                      child: Text(
+                        value,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.green,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 }

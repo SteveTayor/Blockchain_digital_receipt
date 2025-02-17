@@ -82,7 +82,7 @@ class _AddReceiptScreenState extends State<AddReceiptScreen> {
     final newReceipt = Receipt(
       id: randomId,
       vendorName: vendor,
-      amount: amount,
+      amountNaira: amount,
       date: _selectedDate,
       category: _selectedCategory,
       paymentMethod: paymentMethod.isEmpty ? "Visa **** 4032" : paymentMethod,
@@ -98,7 +98,7 @@ class _AddReceiptScreenState extends State<AddReceiptScreen> {
         "Amount: \$${amount.toStringAsFixed(2)}\n"
         "Date: ${DateFormat.yMd().format(_selectedDate)}\n"
         "Category: $_selectedCategory\n"
-        "PaymentMethod: ${newReceipt.paymentMethod}\n"
+        "PaymentMethod: ${newReceipt.decryptedPaymentMethod}\n"
         "StoreLocation: ${newReceipt.storeLocation}\n"
         "Notes: $notes\n";
 
