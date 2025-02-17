@@ -137,8 +137,9 @@ class _AddReceiptScreenState extends State<AddReceiptScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Add New Receipt", style: TextStyle(color: Colors.white)),
-                backgroundColor: Colors.deepOrange.shade600,
+        title: const Text("Add New Receipt",
+            style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.deepOrange.shade600,
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -147,214 +148,251 @@ class _AddReceiptScreenState extends State<AddReceiptScreen> {
               ? const Center(child: CircularProgressIndicator())
               : Form(
                   key: _formKey,
-                  child: Card(
-                    color: Colors.white,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 16),
-                      child: Column(
-                        spacing: 24,
-                        children: [
-                          SizedBox(height: 18),
-                          // Vendor Name
-                          TextFormField(
-                            controller: _vendorController,
-                            textInputAction: TextInputAction.next,
-                            decoration: InputDecoration(
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey, width: 1),
+                  child: Column(
+                    children: [
+                      Card(
+                        color: Colors.white,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 26, vertical: 16),
+                          child: Column(
+                            spacing: 24,
+                            children: [
+                              SizedBox(height: 18),
+                              // Vendor Name
+                              TextFormField(
+                                controller: _vendorController,
+                                textInputAction: TextInputAction.next,
+                                decoration: InputDecoration(
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.grey, width: 1),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.orange.shade300,
+                                        width: 2),
+                                  ),
+                                  filled: true,
+                                  fillColor: Colors.orange.shade50,
+                                  labelText: "Vendor Name",
+                                  hintText:
+                                      "Enter vendor name (e.g., Whole Foods)",
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return "Please enter a vendor name";
+                                  }
+                                  return null;
+                                },
                               ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.orange.shade300, width: 2),
+
+                              // Amount
+                              TextFormField(
+                                controller: _amountController,
+                                textInputAction: TextInputAction.next,
+                                decoration: InputDecoration(
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.grey, width: 1),
+                                  ),
+                                  filled: true,
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.orange.shade300,
+                                        width: 2),
+                                  ),
+                                  fillColor: Colors.orange.shade50,
+                                  labelText: "Amount",
+                                  hintText: "\$0.00",
+                                ),
+                                keyboardType:
+                                    const TextInputType.numberWithOptions(
+                                        decimal: true),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return "Please enter an amount";
+                                  }
+                                  if (double.tryParse(value) == null) {
+                                    return "Enter a valid number";
+                                  }
+                                  return null;
+                                },
                               ),
-                              filled: true,
-                              fillColor: Colors.orange.shade50,
-                              labelText: "Vendor Name",
-                              hintText: "Enter vendor name (e.g., Whole Foods)",
-                            ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return "Please enter a vendor name";
-                              }
-                              return null;
-                            },
-                          ),
-                      
-                          // Amount
-                          TextFormField(
-                            controller: _amountController,
-textInputAction: TextInputAction.next,
-                            decoration: InputDecoration(
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey, width: 1),
-                              ),
-                              filled: true,
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.orange.shade300, width: 2),
-                              ),
-                              fillColor: Colors.orange.shade50,
-                              labelText: "Amount",
-                              hintText: "\$0.00",
-                            ),
-                            keyboardType:
-                                const TextInputType.numberWithOptions(decimal: true),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return "Please enter an amount";
-                              }
-                              if (double.tryParse(value) == null) {
-                                return "Enter a valid number";
-                              }
-                              return null;
-                            },
-                          ),
-                      
-                          // Transaction Date
-                          InkWell(
-                            onTap: _selectDate,
-                            child: InputDecorator(
-                            decoration: InputDecoration(
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey, width: 1),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.orange.shade300, width: 2),
-                              ),
-                              filled: true,
-                              fillColor: Colors.orange.shade50,
-                                labelText: "Transaction Date",
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(dateFormatted),
-                                  const Icon(Icons.calendar_today),
-                                ],
-                              ),
-                            ),
-                          ),
-                      
-                          // Category
-                          DropdownButtonFormField<String>(
-                            decoration: InputDecoration(
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey, width: 1),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.orange.shade300, width: 2),
-                              ),
-                              filled:true,
-                              fillColor: Colors.orange.shade50,
-                              labelText: "Category",
-                            ),
-                            value: _selectedCategory,
-                            items: _categories
-                                .map((c) => DropdownMenuItem(
-                                      value: c,
-                                      child: Text(c),
-                                    ))
-                                .toList(),
-                            onChanged: (val) {
-                              if (val != null) {
-                                setState(() {
-                                  _selectedCategory = val;
-                                });
-                              }
-                            },
-                          ),
-                      
-                          // Payment Method
-                          TextFormField(
-                            controller: _paymentMethodController,
-                            textInputAction: TextInputAction.next,
-                            decoration: InputDecoration(
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey, width: 1),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.orange.shade300, width: 2),
-                              ),
-                              filled: true,
-                              fillColor: Colors.orange.shade50,
-                              labelText: "Payment Method",
-                              hintText: "Visa **** 4032",
-                            ),
-                          ),
-                      
-                          // Store Location
-                          TextFormField(
-                            controller: _storeLocationController,
-                            textInputAction: TextInputAction.next,
-                            decoration: InputDecoration(
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey, width: 1),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.orange.shade300, width: 2),
-                              ),
-                              filled: true,
-                              fillColor: Colors.orange.shade50,
-                              labelText: "Store Location",
-                              hintText: "123 Market St",
-                            ),
-                          ),
-                      
-                          // Notes
-                          TextFormField(
-                            controller: _notesController,
-                            textInputAction: TextInputAction.done,
-                            decoration: InputDecoration(
-                              filled: true,
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey, width: 1),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.orange.shade300, width: 2),
-                              ),
-                              fillColor: Colors.orange.shade50,
-                              labelText: "Notes (Optional)",
-                              hintText: "Add any additional details",
-                            ),
-                            maxLines: 2,
-                          ),
-                      
-                          // Receipt Image
-                          GestureDetector(
-                            onTap: _pickImage,
-                            child: Container(
-                              height: 150,
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                color: Colors.grey[200],
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: _selectedImage == null
-                                  ? Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: const [
-                                        Icon(Icons.camera_alt, color: Colors.grey),
-                                        SizedBox(height: 8),
-                                        Text("Tap to add receipt photo"),
-                                      ],
-                                    )
-                                  : Image.file(
-                                      _selectedImage!,
-                                      fit: BoxFit.cover,
+
+                              // Transaction Date
+                              InkWell(
+                                onTap: _selectDate,
+                                child: InputDecorator(
+                                  decoration: InputDecoration(
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors.grey, width: 1),
                                     ),
-                            ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors.orange.shade300,
+                                          width: 2),
+                                    ),
+                                    filled: true,
+                                    fillColor: Colors.orange.shade50,
+                                    labelText: "Transaction Date",
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(dateFormatted),
+                                      const Icon(Icons.calendar_today),
+                                    ],
+                                  ),
+                                ),
+                              ),
+
+                              // Category
+                              DropdownButtonFormField<String>(
+                                decoration: InputDecoration(
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.grey, width: 1),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.orange.shade300,
+                                        width: 2),
+                                  ),
+                                  filled: true,
+                                  fillColor: Colors.orange.shade50,
+                                  labelText: "Category",
+                                ),
+                                value: _selectedCategory,
+                                items: _categories
+                                    .map((c) => DropdownMenuItem(
+                                          value: c,
+                                          child: Text(c),
+                                        ))
+                                    .toList(),
+                                onChanged: (val) {
+                                  if (val != null) {
+                                    setState(() {
+                                      _selectedCategory = val;
+                                    });
+                                  }
+                                },
+                              ),
+
+                              // Payment Method
+                              TextFormField(
+                                controller: _paymentMethodController,
+                                textInputAction: TextInputAction.next,
+                                decoration: InputDecoration(
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.grey, width: 1),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.orange.shade300,
+                                        width: 2),
+                                  ),
+                                  filled: true,
+                                  fillColor: Colors.orange.shade50,
+                                  labelText: "Payment Method",
+                                  hintText: "Visa **** 4032",
+                                ),
+                              ),
+
+                              // Store Location
+                              TextFormField(
+                                controller: _storeLocationController,
+                                textInputAction: TextInputAction.next,
+                                decoration: InputDecoration(
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.grey, width: 1),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.orange.shade300,
+                                        width: 2),
+                                  ),
+                                  filled: true,
+                                  fillColor: Colors.orange.shade50,
+                                  labelText: "Store Location",
+                                  hintText: "123 Market St",
+                                ),
+                              ),
+
+                              // Notes
+                              TextFormField(
+                                controller: _notesController,
+                                textInputAction: TextInputAction.done,
+                                decoration: InputDecoration(
+                                  filled: true,
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.grey, width: 1),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.orange.shade300,
+                                        width: 2),
+                                  ),
+                                  fillColor: Colors.orange.shade50,
+                                  labelText: "Notes (Optional)",
+                                  hintText: "Add any additional details",
+                                ),
+                                maxLines: 2,
+                              ),
+
+                              // Receipt Image
+                              GestureDetector(
+                                onTap: _pickImage,
+                                child: Container(
+                                  height: 150,
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[200],
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: _selectedImage == null
+                                      ? Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: const [
+                                            Icon(Icons.camera_alt,
+                                                color: Colors.grey),
+                                            SizedBox(height: 8),
+                                            Text("Tap to add receipt photo"),
+                                          ],
+                                        )
+                                      : Image.file(
+                                          _selectedImage!,
+                                          fit: BoxFit.cover,
+                                        ),
+                                ),
+                              ),
+                              const SizedBox(height: 24),
+
+                              // Submit Button
+                            ],
                           ),
-                          const SizedBox(height: 24),
-                      
-                          // Submit Button
-                          SizedBox(
-                            width: double.infinity,
-                            child: OutlinedButton(
-                              onPressed: _submitReceipt,
-                              child: const Text("Submit Receipt"),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: OutlinedButton(
+                            onPressed: _submitReceipt,
+                            child: const Text("Submit Receipt"),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
         ),
