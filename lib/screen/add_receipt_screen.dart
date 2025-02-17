@@ -204,7 +204,7 @@ class _AddReceiptScreenState extends State<AddReceiptScreen> {
                                   ),
                                   fillColor: Colors.orange.shade50,
                                   labelText: "Amount",
-                                  hintText: "\$0.00",
+                                  hintText: "₦0.00",
                                 ),
                                 keyboardType:
                                     const TextInputType.numberWithOptions(

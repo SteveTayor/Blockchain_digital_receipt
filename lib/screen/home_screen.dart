@@ -51,6 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
       _futureReceipts = receipts;
     });
   }
+  
 //   void _loadReceipts() {
 //     _futureReceipts = ReceiptRepository.instance.getAllReceipts();
 //   }
@@ -330,7 +331,7 @@ class _HomeScreenState extends State<HomeScreen> {
       totalSpent += r.amountNaira;
     }
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
@@ -366,17 +367,19 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 8),
-              child: Column(
-                children: [
-                  Text(
-                    "\$${totalSpent.toStringAsFixed(2)}",
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+              child: FittedBox(
+                child: Column(
+                  children: [
+                    Text(
+                      "₦${totalSpent.toStringAsFixed(2)}",
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  const Text("Total Spent"),
-                ],
+                    const Text("Total Spent"),
+                  ],
+                ),
               ),
             ),
           ),

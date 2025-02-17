@@ -103,14 +103,14 @@ class _ReceiptDetailsScreenState extends State<ReceiptDetailsScreen> {
                         Text("Amount: ₦${receipt.amountNaira}", style: const TextStyle(fontSize: 18)),
                     // Text("Equivalent in USD: \$${amountUsd.toStringAsFixed(2)}", style: TextStyle(fontSize: 14, color: Colors.grey)),
          
-                        Text(
-                          totalAmount,
-                          style: const TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.orange,
-                          ),
-                        ),
+                        // Text(
+                        //   totalAmount,
+                        //   style: const TextStyle(
+                        //     fontSize: 24,
+                        //     fontWeight: FontWeight.bold,
+                        //     color: Colors.orange,
+                        //   ),
+                        // ),
                       ],
                     ),
                     Text(dateString,
@@ -292,11 +292,13 @@ class _ReceiptDetailsScreenState extends State<ReceiptDetailsScreen> {
   Widget _buildTransactionRow(String value) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 4.0),
-      child: value.contains("Insufficient funds ")
+      child: value.contains("insufficient funds ")
           ? Card(
+            elevation: 0.0,
               color: Colors.red,
               child: Padding(
-                padding: EdgeInsets.all(8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 44, vertical: 8),
                 child: Text("Insufficient funds for transfer on your wallet",
                     style: TextStyle(color: Colors.white)),
               ),

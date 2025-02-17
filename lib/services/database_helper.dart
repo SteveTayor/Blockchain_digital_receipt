@@ -37,7 +37,7 @@ class DatabaseHelper {
       id TEXT PRIMARY KEY,
       vendorName TEXT,
       amount REAL,
-      amountNaira REAL,  -- Add this line
+      amountNaira REAL,
       date INTEGER,
       category TEXT,
       encryptedPaymentMethod TEXT,

@@ -28,7 +28,10 @@ class _SeeAllReceiptsPageState extends State<SeeAllReceiptsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('All Receipts', style: TextStyle(fontSize: 35,color: Colors.white),),
+        title: const Text(
+          'All Available Receipts',
+          style: TextStyle(color: Colors.white),
+        ),
         backgroundColor: Colors.deepOrange.shade600,
       ),
       body: FutureBuilder<List<Receipt>>(
@@ -44,12 +47,10 @@ class _SeeAllReceiptsPageState extends State<SeeAllReceiptsPage> {
           final receipts = snapshot.data ?? [];
           final filteredReceipts = _selectedCategory == "All"
               ? receipts
-              : receipts
-                  .where((r) => r.category == _selectedCategory)
-                  .toList();
+              : receipts.where((r) => r.category == _selectedCategory).toList();
 
           return Padding(
-            padding: const EdgeInsets.symmetric(),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Column(
               spacing: 20,
               children: [
@@ -60,10 +61,12 @@ class _SeeAllReceiptsPageState extends State<SeeAllReceiptsPage> {
                     itemBuilder: (context, index) {
                       final receipt = filteredReceipts[index];
                       return Card(
+                        color: Colors.grey.shade200,
                         child: ListTile(
-                          title: Text(receipt.vendorName),
+                          title: Text(receipt.vendorName, style: TextStyle(fontSize: 18)),
                           subtitle: Text(
-                              "₦${receipt.amountNaira.toStringAsFixed(2)} • ${receipt.category}"),
+                              "₦${receipt.amountNaira.toStringAsFixed(2)} ", style: TextStyle(color: Colors.black, fontSize: 20.0, fontWeight: FontWeight.bold),),
+                          trailing: Text("• ${receipt.category}", style: TextStyle(fontSize: 16)),
                           onTap: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(

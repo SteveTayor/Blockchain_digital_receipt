@@ -65,7 +65,7 @@ class Receipt {
     return Receipt(
       id: map['id'] as String,
       vendorName: map['vendorName'] as String,
-      amountNaira: (map['amount'] as num).toDouble(),
+      amountNaira: (map['amountNaira'] as num).toDouble(),
       date: DateTime.fromMillisecondsSinceEpoch(map['date'] as int),
       category: map['category'] as String,
       paymentMethod: EncryptionHelper.decryptText(map['encryptedPaymentMethod']) as dynamic,

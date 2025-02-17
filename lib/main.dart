@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 
 import 'repository/receipt_repository.dart';
 import 'screen/home_screen.dart';
+import 'services/encryption_helper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Initialize the database before running the app
   await ReceiptRepository.instance.initializeDB();
-
+  await EncryptionHelper.initialize();
   runApp(const BlockReceiptApp());
 }
 
