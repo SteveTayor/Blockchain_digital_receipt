@@ -8,7 +8,7 @@ class BlockchainService {
       "https://eth-sepolia.g.alchemy.com/v2/47_HeGgiNZbZAWCLBs3uN-uyncSsyjGt";
 
   // Replace with a valid private key for testing
-  final String privateKey = "bc54366eac5308e7714f6a4f90155cb50158d04c1693896ad68dc5cf32f69527";
+  final String privateKey = "bc54366ea*******32f69527";
 
   late Web3Client _client;
   late EthPrivateKey _credentials;
