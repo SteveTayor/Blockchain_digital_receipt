@@ -1,6 +1,6 @@
 # BlockReceipt
 
-BlockReceipt is a Flutter-based mobile application for securely managing digital receipts using blockchain technology. It allows users to add new receipts, capture vendor/amount/date/category information, attach an image, and record a transaction hash on the Ethereum test network (Goerli) for immutability.
+BlockReceipt is a Flutter-based mobile application for securely managing digital receipts using blockchain technology. It allows users to add new receipts, capture vendor/amount/date/category information, attach an image, and record a transaction hash on the Ethereum test network (Serpoli) for immutability.
 
 ## Features
 
@@ -21,12 +21,12 @@ BlockReceipt is a Flutter-based mobile application for securely managing digital
    - Option to share or take additional actions (placeholder).
 
 4. **Blockchain Integration**
-   - Demonstrates how to log a string of receipt data on Ethereum’s Goerli testnet.
+   - Demonstrates how to log a string of receipt data on Ethereum’s Serpoli testnet.
    - Uses a private key to sign zero-value transactions containing the receipt data.
 
 ## Getting Started
 
 1. **Clone the Repository**  
    ```bash
-   git clone https://github.com/your-username/blockreceipt.git
+   git clone https://github.com/SteveTayor/Blockchain_digital_receipt.git
    cd blockreceipt
