@@ -48,34 +48,38 @@ class _SeeAllReceiptsPageState extends State<SeeAllReceiptsPage> {
                   .where((r) => r.category == _selectedCategory)
                   .toList();
 
-          return Column(
-            children: [
-              _buildCategoryDropdown(receipts),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: filteredReceipts.length,
-                  itemBuilder: (context, index) {
-                    final receipt = filteredReceipts[index];
-                    return Card(
-                      child: ListTile(
-                        title: Text(receipt.vendorName),
-                        subtitle: Text(
-                            "₦${receipt.amountNaira.toStringAsFixed(2)} • ${receipt.category}"),
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => ReceiptDetailsScreen(
-                                receiptId: receipt.id,
+          return Padding(
+            padding: const EdgeInsets.symmetric(),
+            child: Column(
+              spacing: 20,
+              children: [
+                _buildCategoryDropdown(receipts),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: filteredReceipts.length,
+                    itemBuilder: (context, index) {
+                      final receipt = filteredReceipts[index];
+                      return Card(
+                        child: ListTile(
+                          title: Text(receipt.vendorName),
+                          subtitle: Text(
+                              "₦${receipt.amountNaira.toStringAsFixed(2)} • ${receipt.category}"),
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => ReceiptDetailsScreen(
+                                  receiptId: receipt.id,
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                  },
+                            );
+                          },
+                        ),
+                      );
+                    },
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           );
         },
       ),
