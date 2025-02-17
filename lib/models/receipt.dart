@@ -68,7 +68,7 @@ class Receipt {
       amountNaira: (map['amount'] as num).toDouble(),
       date: DateTime.fromMillisecondsSinceEpoch(map['date'] as int),
       category: map['category'] as String,
-      paymentMethod: EncryptionHelper.decryptText(map['encryptedPaymentMethod']),
+      paymentMethod: EncryptionHelper.decryptText(map['encryptedPaymentMethod']) as dynamic,
       storeLocation: map['storeLocation'] as String,
       notes: map['notes'] as String,
       imageFile: imageFile,

@@ -6,6 +6,7 @@ import 'add_receipt_screen.dart';
 import 'all_receipt_screen.dart';
 import 'receipt_details_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -15,26 +16,54 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   // Instead of a local list, we fetch from the DB
-  late Future<List<Receipt>> _futureReceipts;
+  late List<Receipt> _futureReceipts;
+  // String _selectedCategory = "All";
+  // List<String> _categories = [
+  //   "All",
+  //   "Groceries",
+  //   "Electronics",
+  //   "Clothing",
+  //   "Entertainment"
+  // ];
+  
+  List<String> _categories = [];
   String _selectedCategory = "All";
-  List<String> _categories = ["All", "Groceries", "Electronics", "Clothing", "Entertainment"];
-
-
   @override
   void initState() {
     super.initState();
-    _loadReceipts();
     _loadCategories();
+    _fetchReceipts();
   }
-  void _loadReceipts() {
-    _futureReceipts = ReceiptRepository.instance.getAllReceipts();
-  }
- Future<void> _loadCategories() async {
+
+  Future<void> _loadCategories() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String>? storedCategories = prefs.getStringList('categories');
     setState(() {
-      _categories = prefs.getStringList('categories') ?? _categories;
+      _categories = storedCategories?.whereType<String>().toList() ?? [
+        "All", "Groceries", "Electronics", "Clothing", "Entertainment"
+      ];
     });
   }
+
+  Future<void> _fetchReceipts() async {
+    final receipts = await ReceiptRepository.instance.getAllReceipts();
+    setState(() {
+      _futureReceipts = receipts;
+    });
+  }
+//   void _loadReceipts() {
+//     _futureReceipts = ReceiptRepository.instance.getAllReceipts();
+//   }
+
+//   Future<void> _loadCategories() async {
+//   SharedPreferences prefs = await SharedPreferences.getInstance();
+//   List<dynamic>? storedCategories = prefs.getStringList('categories');
+  
+//   setState(() {
+//     _categories = storedCategories?.whereType<String>().toList() ??
+//         ["All", "Groceries", "Electronics", "Clothing", "Entertainment"];
+//   });
+// }
 
   Future<void> _addNewCategory() async {
     TextEditingController categoryController = TextEditingController();
@@ -57,7 +86,8 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () async {
               if (categoryController.text.isNotEmpty) {
                 setState(() {
-                  _categories.add(categoryController.text);
+                  _categories = List.from(_categories)
+                    ..add(categoryController.text);
                 });
                 SharedPreferences prefs = await SharedPreferences.getInstance();
                 prefs.setStringList('categories', _categories);
@@ -89,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: FutureBuilder<List<Receipt>>(
-        future: _futureReceipts,
+        future: ReceiptRepository.instance.getAllReceipts(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -165,15 +195,16 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           const SizedBox(height: 15),
                           if (filteredReceipts.isEmpty)
-                    const Text("No receipts found.", textAlign: TextAlign.center)
-                  else
-                    Column(
-                      spacing: 20,
-                      children: filteredReceipts.reversed
-                          .take(4)
-                          .map((r) => _buildReceiptTile(context, r))
-                          .toList(),
-                    ),
+                            const Text("No receipts found.",
+                                textAlign: TextAlign.center),
+                          
+                            Column(
+                              spacing: 20,
+                              children: filteredReceipts.reversed
+                                  .take(4)
+                                  .map((r) => _buildReceiptTile(context, r))
+                                  .toList(),
+                            ),
                         ],
                       ),
                     ),
@@ -211,7 +242,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
-                    children: _categories.map((category) {
+                    children: (_categories.isNotEmpty ? _categories : ["All"])
+                        .map((category) {
                       return _CategoryChip(
                         label: category,
                         isSelected: _selectedCategory == category,
@@ -238,7 +270,7 @@ class _HomeScreenState extends State<HomeScreen> {
           // If a new receipt was added, refresh
           if (result == true) {
             setState(() {
-              _loadReceipts();
+              _fetchReceipts();
             });
           }
         },
@@ -268,12 +300,16 @@ class _HomeScreenState extends State<HomeScreen> {
             Text(
               "₦${r.amountNaira.toStringAsFixed(2)}",
               style: const TextStyle(
-                  color: Colors.deepOrange, fontSize: 16, fontWeight: FontWeight.bold),
+                  color: Colors.deepOrange,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold),
             ),
             Text(
               "\$${amountUsd.toStringAsFixed(2)}",
               style: const TextStyle(
-                  color: Colors.grey, fontSize: 12, fontWeight: FontWeight.w400),
+                  color: Colors.grey,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w400),
             ),
           ],
         ),

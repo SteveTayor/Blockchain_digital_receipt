@@ -21,7 +21,6 @@ class ReceiptRepository {
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
-
   // Fetch all receipts
   Future<List<Receipt>> getAllReceipts() async {
     final List<Map<String, dynamic>> maps = await _db.query('receipts');

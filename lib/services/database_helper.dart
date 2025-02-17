@@ -32,20 +32,22 @@ class DatabaseHelper {
 
   // Create tables
   FutureOr<void> _onCreate(Database db, int version) async {
-    await db.execute('''
-      CREATE TABLE receipts (
-        id TEXT PRIMARY KEY,
-        vendorName TEXT,
-        amount REAL,
-        date INTEGER,
-        category TEXT,
-        paymentMethod TEXT,
-        storeLocation TEXT,
-        notes TEXT,
-        imagePath TEXT,
-        itemsJson TEXT,
-        blockchainHash TEXT
-      )
-    ''');
-  }
+  await db.execute('''
+    CREATE TABLE receipts (
+      id TEXT PRIMARY KEY,
+      vendorName TEXT,
+      amount REAL,
+      amountNaira REAL,  -- Add this line
+      date INTEGER,
+      category TEXT,
+      encryptedPaymentMethod TEXT,
+      storeLocation TEXT,
+      notes TEXT,
+      imagePath TEXT,
+      itemsJson TEXT,
+      blockchainHash TEXT
+    )
+  ''');
+}
+
 }
