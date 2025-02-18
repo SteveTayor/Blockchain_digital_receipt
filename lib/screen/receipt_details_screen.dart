@@ -136,7 +136,7 @@ class _ReceiptDetailsScreenState extends State<ReceiptDetailsScreen> {
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                     ),
                     _buildDetailRow("Receipt ID", receipt.id),
-                    _buildDetailRow("Payment Method", receipt.encryptedPaymentMethod),
+                    _buildDetailRow("Payment Method", receipt.decryptedPaymentMethod),
                     _buildDetailRow("Store Location", receipt.storeLocation),
                     _buildDetailRow("Category", receipt.category),
                   ],
@@ -147,36 +147,39 @@ class _ReceiptDetailsScreenState extends State<ReceiptDetailsScreen> {
             // Blockchain Verification
             Card(
               color: Colors.white,
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                child: Column(
-                  spacing: 16,
-                  children: [
-                    const Text(
-                      "Blockchain Verification",
-                      textAlign: TextAlign.center,
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-                    ),
-                    Text(
-                      "Transaction Hash",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: Colors.grey.shade600,
-                          letterSpacing: 0.5,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18),
-                    ),
-                    _buildTransactionRow(transactionHash),
-                    if (transactionHash.startsWith("0x"))
+              child: SizedBox(
+                width: double.infinity,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  child: Column(
+                    spacing: 16,
+                    children: [
                       const Text(
-                        "Verified on Ethereum",
-                        style: TextStyle(color: Colors.green),
+                        "Blockchain Verification",
+                        textAlign: TextAlign.center,
+                        style:
+                            TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                       ),
-                    if (transactionHash.startsWith("0x"))
-                      QrImageView(data: transactionHash, size: 200),
-                  ],
+                      Text(
+                        "Transaction Hash",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: Colors.grey.shade600,
+                            letterSpacing: 0.5,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18),
+                      ),
+                      _buildTransactionRow(transactionHash),
+                      if (transactionHash.startsWith("0x"))
+                        const Text(
+                          "Verified on Ethereum",
+                          style: TextStyle(color: Colors.green),
+                        ),
+                      if (transactionHash.startsWith("0x"))
+                        QrImageView(data: transactionHash, size: 200),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -185,62 +188,65 @@ class _ReceiptDetailsScreenState extends State<ReceiptDetailsScreen> {
             // Items
             Card(
               color: Colors.white,
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  spacing: 10,
-                  children: [
-                    const Text(
-                      "Items",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-                    ),
-                    Column(
-                      children: receipt.items
-                          .map((item) => Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 4.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(item.name),
-                                    Text("\$${item.price.toStringAsFixed(2)}",
-                                        style: TextStyle(
-                                          color: Colors.orange.shade600,
-                                          fontWeight: FontWeight.bold,
-                                        )),
-                                  ],
-                                ),
-                              ))
-                          .toList(),
-                    ),
-                    // Notes
-                    if (receipt.notes.isNotEmpty) ...[
+              child: SizedBox(
+                width: double.infinity,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    spacing: 10,
+                    children: [
                       const Text(
-                        "Notes",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20),
+                        "Items",
+                        style:
+                            TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                       ),
-                      const SizedBox(height: 8),
-                      Text(receipt.notes),
-                      const SizedBox(height: 16),
-                    ],
-
-                    // Image
-                    if (receipt.imageFile != null) ...[
-                      const Text(
-                        "Receipt Image",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20),
+                      Column(
+                        children: receipt.items
+                            .map((item) => Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 4.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(item.name),
+                                      Text("\$${item.price.toStringAsFixed(2)}",
+                                          style: TextStyle(
+                                            color: Colors.orange.shade600,
+                                            fontWeight: FontWeight.bold,
+                                          )),
+                                    ],
+                                  ),
+                                ))
+                            .toList(),
                       ),
-                      const SizedBox(height: 8),
-                      Image.file(receipt.imageFile!),
-                      const SizedBox(height: 16),
+                      // Notes
+                      if (receipt.notes.isNotEmpty) ...[
+                        const Text(
+                          "Notes",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(receipt.notes),
+                        const SizedBox(height: 16),
+                      ],
+                
+                      // Image
+                      if (receipt.imageFile != null) ...[
+                        const Text(
+                          "Receipt Image",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20),
+                        ),
+                        const SizedBox(height: 8),
+                        Image.file(receipt.imageFile!),
+                        const SizedBox(height: 16),
+                      ],
                     ],
-                  ],
+                  ),
                 ),
               ),
             ),
@@ -292,7 +298,7 @@ class _ReceiptDetailsScreenState extends State<ReceiptDetailsScreen> {
   Widget _buildTransactionRow(String value) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 4.0),
-      child: value.contains("insufficient funds ")
+      child: value.contains("insufficient funds ") 
           ? Card(
             elevation: 0.0,
               color: Colors.red,
@@ -303,7 +309,16 @@ class _ReceiptDetailsScreenState extends State<ReceiptDetailsScreen> {
                     style: TextStyle(color: Colors.white)),
               ),
             )
-          : Card(
+          : value.contains("Failed host lookup") ? Card(
+            elevation: 0.0,
+              color: Colors.red,
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 44, vertical: 8),
+                child: Text("Error connecting to server alchemy",
+                    style: TextStyle(color: Colors.white)),
+              ),
+            ) : Card(
               color: Colors.orange.shade50,
               child: Padding(
                 padding:

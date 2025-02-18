@@ -58,14 +58,15 @@ class _SeeAllReceiptsPageState extends State<SeeAllReceiptsPage> {
                 Expanded(
                   child: ListView.builder(
                     itemCount: filteredReceipts.length,
+                    
                     itemBuilder: (context, index) {
                       final receipt = filteredReceipts[index];
                       return Card(
                         color: Colors.grey.shade200,
                         child: ListTile(
-                          title: Text(receipt.vendorName, style: TextStyle(fontSize: 18)),
+                          title: Text(receipt.vendorName, style: TextStyle(fontSize: 20)),
                           subtitle: Text(
-                              "₦${receipt.amountNaira.toStringAsFixed(2)} ", style: TextStyle(color: Colors.black, fontSize: 20.0, fontWeight: FontWeight.bold),),
+                              "₦${receipt.amountNaira.toStringAsFixed(2)} ", style: TextStyle(color: Colors.black, fontSize: 16.0, fontWeight: FontWeight.bold),),
                           trailing: Text("• ${receipt.category}", style: TextStyle(fontSize: 16)),
                           onTap: () {
                             Navigator.of(context).push(

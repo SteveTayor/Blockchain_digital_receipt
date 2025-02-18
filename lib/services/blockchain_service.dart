@@ -5,10 +5,10 @@ import 'dart:typed_data';
 class BlockchainService {
   // Alchemy Sepolia Network URL
   final String rpcUrl =
-      "https://eth-sepolia.g.alchemy.com/v2/47_HeGgiNZbZAWCLBs3uN-uyncSsyjGt";
+      "https://polygon-amoy.g.alchemy.com/v2/47_HeGgiNZbZAWCLBs3uN-uyncSsyjGt";
 
   // Replace with a valid private key for testing
-  final String privateKey = "bc54366ea*******32f69527";
+  final String privateKey = "bc543***********9527";
 
   late Web3Client _client;
   late EthPrivateKey _credentials;
@@ -29,11 +29,11 @@ class BlockchainService {
         value: EtherAmount.zero(),
         data: _encodeData(data),
       );
-      // Sepolia Chain ID is 11155111
+      // Sepolia Chain ID is 80002
       final txHash = await _client.sendTransaction(
         _credentials,
         transaction,
-        chainId: 11155111,
+        chainId: 80002,
       );
       print("Transaction Hash: $txHash");
       return txHash;

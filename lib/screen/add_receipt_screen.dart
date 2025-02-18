@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../models/receipt.dart';
 import '../models/receipt_item.dart';
 import '../repository/receipt_repository.dart';
@@ -23,15 +24,26 @@ class _AddReceiptScreenState extends State<AddReceiptScreen> {
   final _paymentMethodController = TextEditingController();
   final _storeLocationController = TextEditingController();
   final _notesController = TextEditingController();
-  final _categories = ["Groceries", "Electronics", "Clothing", "Entertainment"];
+  List<String> _categories = [];
   String _selectedCategory = "Groceries";
 
+  initState () {
+    super.initState();
+    _loadCategories();
+  }
+  Future<void> _loadCategories() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String>? storedCategories = prefs.getStringList('categories');
+    setState(() {
+      _categories = storedCategories?.whereType<String>().toList() ?? [];
+    });
+  }
   DateTime _selectedDate = DateTime.now();
   File? _selectedImage;
   bool _isSubmitting = false;
 
   final _blockchainService = BlockchainService();
-
+  
   Future<void> _pickImage() async {
     final picker = ImagePicker();
     final pickedFile =
@@ -298,7 +310,7 @@ class _AddReceiptScreenState extends State<AddReceiptScreen> {
                                   filled: true,
                                   fillColor: Colors.orange.shade50,
                                   labelText: "Payment Method",
-                                  hintText: "Visa **** 4032",
+                                  hintText: "e.g;bank transfer, card..",
                                 ),
                               ),
 
